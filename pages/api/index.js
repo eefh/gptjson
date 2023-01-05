@@ -3,9 +3,13 @@ import { Configuration, OpenAIApi } from "openai";
 
 export default async function handler(req, res) {
     try {
+        let token = req.rawHeaders
+            .find((str) => str.match(/^Bearer/))
+            .replace(/^Bearer /, "");
         const configuration = new Configuration({
-            apiKey: req.body.apiKey,
+            apiKey: token,
         });
+
         const openai = new OpenAIApi(configuration);
         const completion = await openai.createCompletion({
             model: "text-davinci-003",
